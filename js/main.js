@@ -1,8 +1,9 @@
-
+//Ryan Emslie - JavaScript Full Stack
+//Techdegree - Unit 4 - Meets Expectation
 
 
 function startGame(){
-    
+    //This block of code sets up the board and resets variables
     let count = 1;
     $('#start').show();
     $('#board').hide();
@@ -58,7 +59,7 @@ function startGame(){
             let num = $(this).attr("id");
             player2Moves[num] = player2Moves[num] + 1;
         };
-        //Game logic to determine winner
+        //Game logic to determine winner of human vs. human game
         if ( ((player1Moves[1] + player1Moves[2] + player1Moves[3]) == 3)  ||
                 ((player1Moves[4] + player1Moves[5] + player1Moves[6]) == 3 ) ||
                 ((player1Moves[7] + player1Moves[8] + player1Moves[9]) == 3 ) ||
@@ -80,8 +81,6 @@ function startGame(){
         {
             endGame();
         }
-        
-        
         count = count + 1;
         changePlayer();  
     });
@@ -103,7 +102,7 @@ function startGame(){
         $('#board').hide();
         $('#finish').show().addClass('screen-win'); 
         count = 0;
-        
+        //If statement determining which winner/tie screen to display
         if ( $('#player1').hasClass('active') ) {
             $('#finish').addClass('screen-win-one');
             $('.message').text('Winner'); 
@@ -114,9 +113,7 @@ function startGame(){
             $('#finish').addClass('screen-win-tie')
             $('.message').text("It's a Tie!");
         }
-
-
-
+        //Resets the player1Moves and player2Moves objects
         for (let i =0; i < 10; i++) {
             player1Moves[i] = 0;
             player2Moves[i] = 0;
@@ -124,7 +121,7 @@ function startGame(){
     };
 
 
-
+    //When 'New Game' button is pressed the Start Game function is called
     $("#finish .button").click(function(){
         startGame();
     });
