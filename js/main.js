@@ -1,10 +1,11 @@
 //Ryan Emslie - JavaScript Full Stack
 //Techdegree - Unit 4 - Meets Expectation
+//This version of my project was desgined to be two human players
 
 
 function startGame(){
     //This block of code sets up the board and resets variables
-    let count = 1;
+    let count = 0;
     $('#start').show();
     $('#board').hide();
     $('#finish').hide();
@@ -15,15 +16,18 @@ function startGame(){
        
 
 
-    //Click event tied to Start Game button
+//Click event tied to Start Game button
     $( "#start .button" ).click( function()  {
         $('#board').show();
         $('#start').hide();
         $('#player1').addClass('active');
+        count = 0;
     });
 
 
-    //Hover event displaying possible move
+
+
+//Hover event displaying possible move
     $("ul.boxes li").hover(function(){
         $("ul.boxes li").removeClass('image-1 image-2');
         if ( $(this).hasClass('box-filled-1') || $(this).hasClass('box-filled-2') ) {
@@ -34,14 +38,10 @@ function startGame(){
         }
     })
 
-    //Click event to put circle or cross
+
+
+//Click event to put circle or cross
     $("ul.boxes li").click(function(){
-        if ( count > 8 ) {
-            $('#player1').removeClass('active');
-            endGame();
-        }
-        
-        
         //Fills in the board square if it is not already selected
         if ( $(this).hasClass('box-filled-1') || $(this).hasClass('box-filled-2') ) {
             return;
@@ -50,7 +50,6 @@ function startGame(){
         } else {
             $(this).addClass('box-filled-2');
         }
-        
         //Assigns "score" to each player
         if ( $('#player1').hasClass('active') ) {
             let num = $(this).attr("id");
@@ -59,8 +58,42 @@ function startGame(){
             let num = $(this).attr("id");
             player2Moves[num] = player2Moves[num] + 1;
         };
+        //Used for testing scoring logic
+        console.log('Player 1 Moves');
+        console.log( JSON.stringify(player1Moves) );
+        console.log('Player 2 Moves');
+        console.log( JSON.stringify(player2Moves) );
         //Game logic to determine winner of human vs. human game
-        if ( ((player1Moves[1] + player1Moves[2] + player1Moves[3]) == 3)  ||
+        gameLogic();
+        //Counts how many spaces have been played
+        count = count + 1;
+        //conditional to see if all spaces have been played
+        if ( count > 8 ) {
+            $('#player1').removeClass('active');
+            endGame();
+        }
+        //Calls function to switch 'active' class
+        changePlayer();  
+    });
+
+
+
+//Function changes the .active for player - called by click event
+    const changePlayer = () => {   
+        if ( $('#player1').hasClass('active') ) {
+            $('#player1').removeClass('active')
+            $('#player2').addClass('active');
+        } else {
+            $('#player1').addClass('active');
+            $('#player2').removeClass('active')
+        };
+    };
+
+
+
+//Function for game logic
+    const gameLogic = () => {
+      if ( ((player1Moves[1] + player1Moves[2] + player1Moves[3]) == 3)  ||
                 ((player1Moves[4] + player1Moves[5] + player1Moves[6]) == 3 ) ||
                 ((player1Moves[7] + player1Moves[8] + player1Moves[9]) == 3 ) ||
                 ((player1Moves[1] + player1Moves[4] + player1Moves[7]) == 3 ) ||
@@ -80,24 +113,13 @@ function startGame(){
                 ((player2Moves[3] + player2Moves[5] + player2Moves[7]) == 3 ) )
         {
             endGame();
-        }
-        count = count + 1;
-        changePlayer();  
-    });
+        }  
+    }
 
 
-    //Function changes the .active for player - called by click event
-    const changePlayer = () => {   
-        if ( $('#player1').hasClass('active') ) {
-            $('#player1').removeClass('active')
-            $('#player2').addClass('active');
-        } else {
-            $('#player1').addClass('active');
-            $('#player2').removeClass('active')
-        };
-    };
 
-    //Function closes board and displays 'Winner' - called in click event
+
+//Function closes board and displays 'Winner' - called in click event
     const endGame = () => {
         $('#board').hide();
         $('#finish').show().addClass('screen-win'); 
@@ -118,10 +140,11 @@ function startGame(){
             player1Moves[i] = 0;
             player2Moves[i] = 0;
         }
+
     };
 
 
-    //When 'New Game' button is pressed the Start Game function is called
+//When 'New Game' button is pressed the Start Game function is called
     $("#finish .button").click(function(){
         startGame();
     });
